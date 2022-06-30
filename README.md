@@ -36,3 +36,16 @@ loss1.backward() # Works!
 loss2 = out2.sum() + grad2_input.sum() + grad2_grid.sum()
 loss2.backward() # RuntimeException: derivative for aten::grid_sampler_3d_backward is not implemented
 ```
+
+# Citation
+
+If you use this code in your project, please consider adding a citation:
+
+```
+@article{wang2022go-surf,
+  title={GO-Surf: Neural Feature Grid Optimization for Fast, High-Fidelity RGB-D Surface Reconstruction},
+  author={Wang, Jingwen and Bleja, Tymoteusz and Agapito, Lourdes},
+  journal={arXiv preprint},
+  year={2022}
+}
+```
