@@ -16,7 +16,7 @@ class SmoothSamplerBackward(torch.autograd.Function):
         ctx.apply_smoothstep = apply_smoothstep
         ctx.padding_mode = padding_mode
         grad_input, grad_grid = _C.backward(grad_out, input, grid, padding_mode_enum(padding_mode),
-                                                            ctx.align_corners, apply_smoothstep, input.requires_grad)
+                                            ctx.align_corners, apply_smoothstep, input.requires_grad)
         ctx.save_for_backward(input, grid, grad_out)
         
         return grad_input, grad_grid
@@ -26,7 +26,8 @@ class SmoothSamplerBackward(torch.autograd.Function):
         input, grid, grad_out = ctx.saved_tensors
 
         input_requires_grad = grad_out_input is not None and (grad_out_input != 0.).any().item()
-        grad_input, grad_grid, grad_grad_out = _C.backward_backward(grad_out_input, grad_out_grid, input, grid, grad_out,
+        grad_input, grad_grid, grad_grad_out = _C.backward_backward(grad_out_input.contiguous(), grad_out_grid.contiguous(),
+                                                                    input, grid, grad_out,
                                                                     padding_mode_enum(ctx.padding_mode), ctx.align_corners,
                                                                     ctx.apply_smoothstep, input_requires_grad)
         
@@ -67,8 +68,8 @@ if __name__ == "__main__":
             assert torch.allclose(out1, out2)
     
             # SmoothSampler backward vs native backward
-            grad1_input, grad1_grid = torch.autograd.grad(out1, [input, grid], torch.ones_like(out1))
-            grad2_input, grad2_grid = torch.autograd.grad(out2, [input, grid], torch.ones_like(out2))
+            grad1_input, grad1_grid = torch.autograd.grad(out1, [input, grid], torch.ones_like(out1), create_graph=True)
+            grad2_input, grad2_grid = torch.autograd.grad(out2, [input, grid], torch.ones_like(out2), create_graph=True)
             assert torch.allclose(grad1_input, grad2_input)
             assert torch.allclose(grad1_grid, grad2_grid)
             
