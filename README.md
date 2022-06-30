@@ -15,6 +15,9 @@ pip install git+https://github.com/tymoteuszb/smooth-sampler
 The API is consistent with Pytorch's grid_sample:
 
 ```python
+import torch
+from smooth_sampler import SmoothSampler
+
 align_corners = True
 padding_mode = "zeros"
 
