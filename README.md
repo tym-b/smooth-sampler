@@ -4,7 +4,7 @@ A drop-in replacement for Pytorch's [grid_sample](https://pytorch.org/docs/stabl
 
 # Installation
 
-On Python3 environment with Pytorch CUDA installation run:
+On Python3 environment with Pytorch >=1.11 CUDA installation run:
 
 ```bash
 pip install git+https://github.com/tymoteuszb/smooth-sampler
